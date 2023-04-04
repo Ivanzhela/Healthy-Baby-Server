@@ -18,7 +18,7 @@ exports.auth = (req, res, next) => {
             };
 
         } catch (err) {
-            console.log(err, 'token');
+
             parseError(err);
         }
     }

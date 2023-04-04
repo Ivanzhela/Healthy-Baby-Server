@@ -4,7 +4,7 @@ const { register, login, logout } = require('../services/authService');
 const { isUser, isGuest } = require('../middlewares/guards');
 
 router.post('/login', isGuest, async (req, res) => {
-    console.log(req.body);
+
     const { username, password } = req.body;
 
     try {
