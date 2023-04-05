@@ -78,7 +78,7 @@ router.get('/:id/stars', isUser, async (req, res) => {
         const owner = await getUser(recipe.owner._id);
 
         if (owner._id !== req.user._id) {
-            owner.notifications.push({ recipe: recipe._id, action: 'rate', username: req.user.username, status: 'unseen'});
+            owner.notifications.push({ recipe: recipe._id, action: 'rate', username: req.user.username, status: 'unseen' });
             recipe.stars.push(req.user._id);
 
             await owner.save();
@@ -114,6 +114,29 @@ router.get('/:id/saves', isUser, async (req, res) => {
     };
 });
 
+router.put('/:id/saves', isUser, async (req, res) => {
+    try {
+        const user = await getUser(req.user._id);
+        const recipe = await getOne(req.params.id);
+        if (recipe.owner._id !== req.user._id) {
+            
+            const userSaveIndex = user.savedRecipes.indexOf(a => a._id == req.params.id);
+            user.savedRecipes.splice(userSaveIndex, 1);
+
+            const savesIndex = recipe.saves.indexOf(a => a == req.user._id);
+            recipe.saves.splice(savesIndex, 1);
+
+            await user.save();
+            await recipe.save();
+
+            res.json(recipe);
+        }
+
+    } catch (err) {
+        parseError(err, res);
+    };
+});
+
 router.post('/:id/comments', isUser, async (req, res) => {
 
     try {
@@ -121,7 +144,7 @@ router.post('/:id/comments', isUser, async (req, res) => {
         const recipe = await getOne(req.params.id);
         const owner = await getUser(recipe.owner._id);
 
-        if(owner._id != req.user._id) {
+        if (owner._id != req.user._id) {
             owner.notifications.push({ recipe: recipe._id, action: 'comment', username: req.user.username, status: 'unseen' });
             await owner.save();
         }
@@ -129,9 +152,8 @@ router.post('/:id/comments', isUser, async (req, res) => {
         const username = req.user.username;
         const comment = req.body.comment;
         const commentId = new mongoose.Types.ObjectId();
-        
-        recipe.comments.push({_id: commentId, username, userId: req.user._id, comment});
 
+        recipe.comments.push({ _id: commentId, username, userId: req.user._id, comment });
         await recipe.save();
         res.json(recipe);
 
