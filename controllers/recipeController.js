@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const router = require('express').Router();
 const { isUser, isOwner } = require('../middlewares/guards');
 const { create, getAll, getOne, update, deleteOne } = require('../services/recipeService');
-const { getUser, updatetUser } = require('../services/userService');
+const { getUser, updateUser } = require('../services/userService');
 const { parseError } = require('../util/parser');
 
 router.get('/', async (req, res) => {
