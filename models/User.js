@@ -1,35 +1,35 @@
-const mongoose = require ("mongoose");
- 
+const mongoose = require("mongoose");
+
 const userSchema = mongoose.Schema({
-    username:{
+    username: {
         type: String,
         required: [true, 'Username is required!'],
-        minlength: [2 , 'Username must be at least 2 characters long!']
+        minlength: [2, 'Username must be at least 2 characters long!']
     },
-    email:{
+    email: {
         type: String,
         required: [true, 'Email is required!'],
-        minlength: [8 , 'Email must be at least 8 characters long!']
+        minlength: [8, 'Email must be at least 8 characters long!']
     },
-    password:{
+    password: {
         type: String,
         required: [true, 'Password is required!'],
-        minlength: [4 , 'Password must be at least 4 characters long!' ]
+        minlength: [4, 'Password must be at least 4 characters long!']
+    },
+    profilePic: {
+        type: String,
     },
     createdRecipes: {
         type: [{ type: mongoose.Types.ObjectId, ref: 'Recipe' }]
     },
-
     savedRecipes: {
         type: [{ type: mongoose.Types.ObjectId, ref: 'Recipe' }]
     },
-
     notifications: {
         type: Array
     }
-
 });
- 
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;

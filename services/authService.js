@@ -5,7 +5,7 @@ const { JWT_SECRET } = require('../config/env');
 
 const blacklist = new Set();
 
-async function register(username, email, password, res) {
+async function register(username, email, password, profilePic, res) {
     const user = await User.findOne({ username }).collation({ locale: 'en', strength: 2 });
 
     if (user) {
@@ -18,6 +18,7 @@ async function register(username, email, password, res) {
     const newUser = await User.create({
         username,
         email,
+        profilePic,
         password: hashedPassword
     });
 
@@ -46,7 +47,7 @@ function logout(token) {
     blacklist.add(token);
 }
 
-function createSession({ _id, username, email }) {
+function createSession({ _id, username, email, profilePic }) {
     const payload = {
         _id,
         username,
@@ -59,6 +60,7 @@ function createSession({ _id, username, email }) {
         _id,
         username,
         email,
+        profilePic,
         token
     };
 };

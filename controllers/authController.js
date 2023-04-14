@@ -20,7 +20,7 @@ router.post('/login', isGuest, async (req, res) => {
 });
 
 router.post('/register', isGuest, async (req, res) => {
-    const { username, email, password, rePass } = req.body;
+    const { username, email, password, profilePic, rePass } = req.body;
 
     try {
         if (username == '' || password == '' || email == '') {
@@ -32,7 +32,7 @@ router.post('/register', isGuest, async (req, res) => {
             throw new Error('Passwords don`t match', {cause: 'password'});
         };
         
-        const user = await register(username, email, password, res);
+        const user = await register(username, email, password, profilePic, res);
 
         res.status(201).json(user);
 
