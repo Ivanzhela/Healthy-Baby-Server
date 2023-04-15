@@ -16,7 +16,7 @@ router.get('/:id', async (req, res) => {
 
 router.put('/:id', isUser, async (req, res) => {
 
-    const { username, email, password, rePass } = req.body;
+    const { username, email, password, rePass, profilePic } = req.body;
 
     try {
         if (username == '' || password == '' || email == '') {
@@ -34,7 +34,8 @@ router.put('/:id', isUser, async (req, res) => {
         const newValue = {
             username,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+            profilePic
         };
 
         res.status(201).json(await updateUser(req.params.id, { ...oldValue, ...newValue }));
