@@ -9,6 +9,8 @@ const recipeSchema = new mongoose.Schema({
     preparation: { type: String, required: [true, "Preparation is required!"]},
     image: { type: String, required: [true, "Image is required!"], match: [ /https?:\/\/.*/m , 'Image should starts with http:// or https:// !']},
     video: { type: String, match: [ /https?:\/\/.*/m , 'Video should starts with http:// or https:// !']},
+    age: { type: String, required: [true, "Age is required!"], enum: ['First Foods', '6-9 Months', '9-12 Months', '12-18 Months']},
+    mealTime: { type: String, required: [true, "Meal time is required!"], enum: ['Breakfast', 'Brunch', 'Main Meals', 'Light Meals', 'Dessert']},
     comments: [],
     stars: [{ type: mongoose.Types.ObjectId, ref: 'User'}],
     saves: [{ type: mongoose.Types.ObjectId, ref: 'User'}],
