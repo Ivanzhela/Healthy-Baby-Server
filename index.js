@@ -9,7 +9,7 @@ const router = require("./routes.js");
 const app = express();
 
 app.use((req, res, next) => {
-  const allowedOrigins = ['http://localhost:4200','http://localhost:3000', 'https://healthy-baby-recipes.web.app', 'https://explore-b-g.web.app'];
+  const allowedOrigins = ['http://localhost:4200','http://localhost:3000', 'https://healthy-baby-recipes.web.app', 'https://explore-b-g.web.app', 'https://dull-ruby-alligator-suit.cyclic.app'];
 
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
