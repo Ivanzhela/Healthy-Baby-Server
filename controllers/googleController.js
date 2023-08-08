@@ -15,11 +15,18 @@ function generatePath(type, query) {
 }
 
 async function googleFetch(method, type, query) {
+  
   const options = {
     hostname: "maps.googleapis.com",
     port: 443,
     path: generatePath(type, query),
     method: `${method}`,
+    headers: {
+      // Добавете хедърите за CORS
+      "Access-Control-Allow-Origin": "https://dull-ruby-alligator-suit.cyclic.app, http://localhost:5000", // или конкретния ви разрешен домейн
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
+      "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, x-authorization",
+    },
   };
 
   return new Promise((resolve, reject) => {
