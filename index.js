@@ -8,17 +8,22 @@ const router = require("./routes.js");
 
 const app = express();
 
-// app.use((req, res, next) => {
-    
-//     res.header('Access-Control-Allow-Origin', 'http://localhost:4200'); // Разрешете заявките от вашия уеб сайт
-//     res.header('Access-Control-Allow-Credentials', 'true'); // Разрешете изпращането на кукита (credentials)
-//     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, x-authorization');
-//     if (req.method === 'OPTIONS') {
-//       res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-//       return res.status(200).json({});
-//     }
-//     next();
-//   });
+app.use((req, res, next) => {
+  const allowedOrigins = ['http://localhost:4200','http://localhost:3000', 'https://healthy-baby-recipes.web.app', 'https://explore-b-g.web.app'];
+
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, x-authorization');
+    if (req.method === 'OPTIONS') {
+      res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+      return res.status(200).json({});
+    }
+  }
+
+  next();
+});
 app.use(cors());
 app.use(express.json());
 // app.use(bodyParser.urlencoded({ extended: true }));
