@@ -17,13 +17,13 @@ function generatePath(type, query) {
 async function googleFetch(method, type, query) {
   
   const options = {
-    hostname: "maps.googleapis.com",
+    hostname: "cors-anywhere.herokuapp.com",
     port: 443,
-    path: generatePath(type, query),
+    path: `https://maps.googleapis.com${generatePath(type, query)}`,
     method: `${method}`,
     headers: {
       // Добавете хедърите за CORS
-      "Access-Control-Allow-Origin": "http://localhost:4200, http://localhost:3000, https://healthy-baby-recipes.web.app, https://explore-b-g.web.app, https://dull-ruby-alligator-suit.cyclic.app", // или конкретния ви разрешен домейн
+      "Access-Control-Allow-Origin": "*", // Можете да разрешите всички оригини тук
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
       "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, x-authorization",
     },
