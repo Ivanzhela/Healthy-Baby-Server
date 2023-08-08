@@ -198,7 +198,7 @@ router.post("/destination/nearby/:category", async (req, res) => {
       type,
       url
     );
-    
+    console.log('nearby', nearby);
     const filterNearby = nearby.results
     .map((res) => {
       return {
