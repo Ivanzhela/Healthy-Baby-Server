@@ -1,11 +1,11 @@
-const User = require('../models/User');
+const User = require('../models/User1');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET
 
 const blacklist = new Set();
 
-async function register(username, email, password, profilePic, res) {
+async function register(username, email, password, res) {
     const user = await User.findOne({ username }).collation({ locale: 'en', strength: 2 });
 
     if (user) {
@@ -18,36 +18,36 @@ async function register(username, email, password, profilePic, res) {
     const newUser = await User.create({
         username,
         email,
-        profilePic,
         password: hashedPassword
     });
 
     return createSession(newUser);
 };
 
-async function login(username, password, res) {
-    const user = await User.findOne({ username }).collation({ locale: 'en', strength: 2 });
+async function login(email, password, res) {
+    const user = await User.findOne({ email }).collation({ locale: 'en', strength: 2 });
 
     if (!user) {
         res.status(403);
-        throw new Error('Cannot find username or password', { cause: 'username' });
+        throw new Error('Cannot find email or password', { cause: 'email' });
     };
 
     const isValidPass = await bcrypt.compare(password, user.password);
 
     if (!isValidPass) {
         res.status(403);
-        throw new Error('Cannot find username or password', { cause: 'password' });
+        throw new Error('Cannot find email or password', { cause: 'password' });
     };
 
     return createSession(user);
 };
 
+
 function logout(token) {
     blacklist.add(token);
 }
 
-function createSession({ _id, username, email, profilePic }) {
+function createSession({ _id, username, email }) {
     const payload = {
         _id,
         username,
@@ -60,7 +60,6 @@ function createSession({ _id, username, email, profilePic }) {
         _id,
         username,
         email,
-        profilePic,
         token
     };
 };

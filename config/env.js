@@ -1,1 +1,0 @@
-exports.JWT_SECRET = 'sdfghjkiuytrdsxcv';
