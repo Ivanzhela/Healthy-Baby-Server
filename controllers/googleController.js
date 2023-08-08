@@ -10,7 +10,7 @@ function generatePath(type, query) {
     : type == "details"
     ? (res += `/details/json?place_id=${query}&fields=place_id,name,formatted_address,formatted_phone_number,rating,opening_hours,photos,geometry`)
     : (res += `/nearbysearch/json?location=${query}`);
-  res += `&key=${process.env.GOOGLE_KEY}&language=en`;
+  res += `&key=AIzaSyDNSfe3ww_7nJhYA9bZPKQposxtC1tuv6E&language=en`;
   return res;
 }
 
