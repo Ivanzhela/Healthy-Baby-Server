@@ -104,7 +104,6 @@ router.post("/category", async (req, res) => {
 
   try {
     const results = await googleFetch(method, type, query);
-    console.log(result);
     const filterPlaces = results.results
       .map((res) => {
         return {
