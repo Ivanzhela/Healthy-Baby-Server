@@ -23,7 +23,7 @@ async function googleFetch(method, type, query) {
     method: `${method}`,
     headers: {
       // Добавете хедърите за CORS
-      "Access-Control-Allow-Origin": "*", // Можете да разрешите всички оригини тук
+      "Access-Control-Allow-Origin": "http://localhost:4200, http://localhost:3000, https://healthy-baby-recipes.web.app, https://explore-b-g.web.app, https://dull-ruby-alligator-suit.cyclic.app", // Можете да разрешите всички оригини тук
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
       "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, x-authorization",
     },
