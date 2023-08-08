@@ -1,7 +1,7 @@
 const User = require('../models/User1');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = require('../config/env');
+const { JWT_SECRET } = require('../config/env');
 
 const blacklist = new Set();
 
