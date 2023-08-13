@@ -125,9 +125,7 @@ router.post('/user/:userId/destination/:content/:id', isUser, async (req, res) =
             await user.save();
         } else if(action.saveItem) {
             const item = action.saveItem;
-            console.log(user[currContent]);
             user[currContent].push(item);
-            console.log(user[currContent]);
             await user.save()
         }
 

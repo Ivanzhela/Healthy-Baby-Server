@@ -97,7 +97,6 @@ router.post("/category", async (req, res) => {
 
   try {
     const results = await googleFetch(method, type, query);
-    console.log(results);
     const filterPlaces = results.results
       .map((res) => {
         return {
@@ -148,7 +147,7 @@ router.post("/destination", async (req, res) => {
       name: result.result.name,
       content: content,
       geometry: result.result.geometry.location,
-      addres: result.result?.formatted_address || "",
+      address: result.result?.formatted_address || "",
       phone: result.result?.formatted_phone_number || "",
       opening_hours: {
         open_now: result.result.opening_hours?.open_now || "",
@@ -172,7 +171,7 @@ router.post("/place", async (req, res) => {
   try {
     const result = await googleFetch(method, type, query);
     const filterPlace = {
-      addres: result.result?.formatted_address || "",
+      address: result.result?.formatted_address || "",
       phone: result.result?.formatted_phone_number || "",
       opening_hours: {
         open_now: result.result?.opening_hours?.open_now || "",
@@ -198,7 +197,6 @@ router.post("/destination/nearby/:category", async (req, res) => {
       type,
       url
     );
-    console.log('nearby', nearby);
     const filterNearby = nearby.results
     .map((res) => {
       return {
@@ -225,13 +223,9 @@ router.post("/planning", async (req, res) => {
   const method = "GET";
   const query = `${(req.body.destination).split(' ').join('+')}+Bulgaria`;
   try {
-
     const user = await User.findById(req.body.userId);
-
     const result = await googleFetch(method, type, query);
-    const exactMatchResults = result.results.filter(
-      (result) => result.name.toLowerCase() == req.body.destination.toLowerCase()
-    )[0];
+    const exactMatchResults = result.results[0];
     if (exactMatchResults.length < 1) {
       res.status(403);
       throw new Error("All fields are required", { cause: "destination" });
@@ -261,7 +255,7 @@ router.post("/planning", async (req, res) => {
         name: destination.result.name,
         content: content,
         geometry: destination.result.geometry.location,
-        addres: destination.result?.formatted_address || "",
+        address: destination.result?.formatted_address || "",
         phone: destination.result.formatted_phone_number || "",
         opening_hours: {
           open_now: destination.result.opening_hours?.open_now || "",
@@ -275,13 +269,14 @@ router.post("/planning", async (req, res) => {
       const endDate = req.body.endDate;
       const id = new mongoose.Types.ObjectId();
       user.createdTrips.push({id, ...filterPlace, startDate, endDate});
-
+      console.log(user);
       await user.save();
 
       res.json(user);
     }
 
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: error });
   }
 });
@@ -291,7 +286,6 @@ router.post("/search", async (req, res) => {
   const method = "GET";
   const query = `${(req.body.destination).split(' ').join('+')}+Bulgaria`;
   try {
-    console.log(query);
     const result = await googleFetch(method, type, query);
     const filterResults = result.results.map((res) => {
       return {
@@ -303,45 +297,6 @@ router.post("/search", async (req, res) => {
       };
     })
     .filter((i) => i.photos != "");
-    console.log(result);
-    // const filterResult = result.results.filter(
-    //   (result) => result.name.toLowerCase() == req.body.destination.toLowerCase()
-    // )[0];
-    // if (filterResult.length < 1) {
-    //   res.status(403);
-    //   throw new Error("Cannot find destination", { cause: "destination" });
-    // } else {
-      // const destination = await googleFetch(
-      //   method,
-      //   "details",
-      //   exactMatchResults.place_id
-      // );
-
-      // const wikiPageName = destination.result.name.split(" ").join("-").trim();
-
-      // const findContent = await wikiFetch(
-      //   `/w/api.php?action=query&format=json&list=search&srsearch=${wikiPageName}&sroffset=0&srlimit=1&uselang=content`
-      // );
-      // const resultContent = await wikiFetch(
-      //   `/w/api.php?action=query&format=json&prop=extracts&exintro=true&explaintext=true&pageids=${
-      //     findContent.query?.search[0]?.pageid || ""
-      //   }`
-      // );
-      // const content =
-      //   resultContent.query?.pages[findContent.query?.search[0]?.pageid]
-      //     ?.extract || "";
-      // const photos = destination.result.photos.map((p) => p.photo_reference);
-
-    //   const destination = {
-    //     place_id: filterResult.place_id,
-    //     name: filterResult.name,
-    //     photos: filterResult.photos ? filterResult.photos[0]["photo_reference"] : "",
-    //     rating: filterResult.rating,
-    //     types: filterResult.types,
-    //   };
-
-    //   res.json(result);
-    // }
     res.json(filterResults);
   } catch (error) {
     res.status(500).json({ error: error });
