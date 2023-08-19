@@ -9,7 +9,9 @@ function generatePath(type, query) {
     ? (res += `/textsearch/json?query=${query}`)
     : type == "details"
     ? (res += `/details/json?place_id=${query}&fields=place_id,name,formatted_address,formatted_phone_number,rating,opening_hours,photos,geometry`)
-    : (res += `/nearbysearch/json?location=${query}`);
+    : type == "nearby" 
+    ? (res += `/nearbysearch/json?location=${query}`)
+    : (res += `/textsearch/json?pagetoken=${query}`)
   res += `&key=AIzaSyDNSfe3ww_7nJhYA9bZPKQposxtC1tuv6E&language=en`;
   return res;
 }
@@ -192,25 +194,44 @@ router.post("/destination/nearby/:category", async (req, res) => {
   const lng = req.body.lng;
   const url = req.params.category == "Restaurants" ? `${lat},${lng}&radius=10000&type=restaurant`: `${lat},${lng}&radius=10000&type=tourist_attraction&rankby=prominence`;
   try {
-    const nearby = await googleFetch(
-      method,
-      type,
-      url
-    );
-    const filterNearby = nearby.results
-    .map((res) => {
-      return {
-        place_id: res.place_id,
-        name: res.name,
-        photos: res.photos ? res.photos[0]["photo_reference"] : "",
-        rating: res.rating,
-        types: res.types,
-      };
-    })
-    .filter((i) => i.photos != "");
+    const results = await googleFetch(method, type, url);
+    const filterPlaces = results.results
+      .map((res) => {
+        return {
+          place_id: res.place_id,
+          name: res.name,
+          photos: res.photos ? res.photos[0]["photo_reference"] : "",
+          rating: res.rating,
+          types: res.types,
+        };
+      })
+      .filter((a) => a.photos !== "");
+
+    const result = {
+      next_page_token: results.next_page_token,
+      results: filterPlaces,
+    };
+
+    res.json(result);
+    // const nearby = await googleFetch(
+    //   method,
+    //   type,
+    //   url
+    // );
+    // const filterNearby = nearby.results
+    // .map((res) => {
+    //   return {
+    //     place_id: res.place_id,
+    //     name: res.name,
+    //     photos: res.photos ? res.photos[0]["photo_reference"] : "",
+    //     rating: res.rating,
+    //     types: res.types,
+    //   };
+    // })
+    // .filter((i) => i.photos != "");
 
 
-    res.json(filterNearby)
+    // res.json(filterNearby)
 
   } catch(err) {
     res.status(500).json({ error: err });
@@ -302,4 +323,34 @@ router.post("/search", async (req, res) => {
     res.status(500).json({ error: error });
   }
 });
+
+router.post('/load', async (req, res) => {
+  const type = "load";
+  const method = "GET";
+  const query = req.body.nextPageToken;
+
+  try {
+    const results = await googleFetch(method, type, query);
+    const filterPlaces = results.results
+      .map((res) => {
+        return {
+          place_id: res.place_id,
+          name: res.name,
+          photos: res.photos ? res.photos[0]["photo_reference"] : "",
+          rating: res.rating,
+          types: res.types,
+        };
+      })
+      .filter((a) => a.photos !== "");
+
+    const result = {
+      next_page_token: results.next_page_token,
+      results: filterPlaces,
+    };
+
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+})
 module.exports = router;
