@@ -16,10 +16,7 @@ const userShopSchema = mongoose.Schema({
         required: [true, 'Password is required!'],
         minlength: [4, 'Password must be at least 4 characters long!']
     },
-    createdProducts: {
-        type: [{ type: mongoose.Types.ObjectId, ref: 'ShopProducts' }]
-    },
-    savedProducts: {
+    favourites: {
         type: [{ type: mongoose.Types.ObjectId, ref: 'ShopProducts' }]
     },
     notifications: {
