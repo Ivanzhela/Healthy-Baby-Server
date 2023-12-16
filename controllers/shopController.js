@@ -13,26 +13,26 @@ const { getUser } = require("../services/userService");
 const { parseError } = require("../util/parser");
 
 router.get("/", async (req, res) => {
-  let options = {};
-  if (req.query.user != "undefined") {
-    let filterRecipes = req.query.saves == "true" ? "saves" : "owner";
 
-    if (req.query.search !== "undefined" && req.query.search !== "") {
-      options = {
-        [filterRecipes]: req.query.user,
-        $text: { $search: `${req.query.search}` },
-      };
-    } else {
-      options = { [filterRecipes]: req.query.user };
-    }
-  } else {
-    if (req.query.search !== "undefined" && req.query.search !== "") {
-      options = { $text: { $search: `${req.query.search}` } };
-    }
-  }
+//   if (req.query.user != "undefined") {
+//     let filterRecipes = req.query.saves == "true" ? "saves" : "owner";
+
+//     if (req.query.search !== "undefined" && req.query.search !== "") {
+//       options = {
+//         [filterRecipes]: req.query.user,
+//         $text: { $search: `${req.query.search}` },
+//       };
+//     } else {
+//       options = { [filterRecipes]: req.query.user };
+//     }
+//   } else {
+//     if (req.query.search !== "undefined" && req.query.search !== "") {
+//       options = { $text: { $search: `${req.query.search}` } };
+//     }
+//   }
 
   try {
-    res.status(200).json(await getAll({}));
+    res.status(200).json(await getAll({category: req.query.category.toLowerCase()}));
   } catch (err) {
     parseError(err, res);
   }
