@@ -32,7 +32,7 @@ router.get("/", async (req, res) => {
 //   }
 
   try {
-    res.status(200).json(await getAll({category: req.query.category.toLowerCase()}));
+    res.status(200).json(await getAll({}));
   } catch (err) {
     parseError(err, res);
   }
