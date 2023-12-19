@@ -64,7 +64,7 @@ router.put("/:id", isUser, async (req, res) => {
   }
 });
 
-router.put("/cart/:id", isUser, async (req, res) => {
+router.post("/cart/:id", isUser, async (req, res) => {
   try {
     const user = await getUser(req.user._id);
     user.cart.push(req.params.id);
