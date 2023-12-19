@@ -7,9 +7,9 @@ const {
   getOne,
   update,
   deleteOne,
+  getUser
 } = require("../services/shopService");
 
-const { getUser } = require("../services/userService");
 const { parseError } = require("../util/parser");
 
 router.get("/", async (req, res) => {
@@ -58,6 +58,28 @@ router.get("/:id", async (req, res) => {
 router.put("/:id", isUser, async (req, res) => {
   try {
     const result = await update(req.params.id, req.body);
+    res.json(result);
+  } catch (err) {
+    parseError(err, res);
+  }
+});
+
+router.put("/cart/:id", isUser, async (req, res) => {
+  try {
+    const user = await getUser(req.user._id);
+    user.cart.push(req.params.id);
+    await user.save();
+
+    res.json('ok');
+  } catch (err) {
+    parseError(err, res);
+  }
+});
+
+router.delete("/cart", isUser, async (req, res) => {
+  try {
+    const user = await getUser(req.user._id);
+
     res.json(result);
   } catch (err) {
     parseError(err, res);
