@@ -47,7 +47,7 @@ function logout(token) {
     blacklist.add(token);
 }
 
-function createSession({ _id, username, email, favourites }) {
+function createSession({ _id, username, email, cart }) {
     const payload = {
         _id,
         username,
@@ -61,7 +61,7 @@ function createSession({ _id, username, email, favourites }) {
         username,
         email,
         token,
-        favourites
+        cart
     };
 };
 
