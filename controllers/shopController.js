@@ -70,17 +70,18 @@ router.post("/cart/:id", async (req, res) => {
     user.cart.push(req.params.id);
     await user.save();
 
-    res.json('ok');
+    res.json(user);
   } catch (err) {
     parseError(err, res);
   }
 });
 
-router.delete("/cart", async (req, res) => {
+router.put("/cart/:id", async (req, res) => {
   try {
     const user = await getUser(req.user._id);
-
-    res.json(result);
+    const indexOfProd = user.cart.indexOf(req.params.id);
+    user.cart = user.cart.splice(indexOfProd, 1);
+    res.json(user);
   } catch (err) {
     parseError(err, res);
   }
