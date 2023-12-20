@@ -17,7 +17,7 @@ const userShopSchema = mongoose.Schema({
         minlength: [4, 'Password must be at least 4 characters long!']
     },
     cart: {
-        type: [{ type: mongoose.Types.ObjectId, ref: 'ShopProducts' }]
+        type: Array
     },
     notifications: {
         type: Array

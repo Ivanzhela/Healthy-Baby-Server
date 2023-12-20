@@ -11,4 +11,4 @@ exports.update = (id, body) => ShopProducts.updateOne({_id: id}, {$set: body}, {
 
 exports.deleteOne = (id) => ShopProducts.deleteOne({_id: id});
 
-exports.getUser = (id) => ShopUsers.findById(id).populate('cart');
+exports.getUser = (id) => ShopUsers.findById(id);
