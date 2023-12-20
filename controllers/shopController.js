@@ -80,7 +80,7 @@ router.put("/cart/:id", async (req, res) => {
   try {
     const user = await getUser(req.user._id);
     const indexOfProd = user.cart.indexOf(req.params.id);
-    user.cart = user.cart.splice(indexOfProd, 1);
+    user.cart.splice(indexOfProd, 1);
     res.json(user);
   } catch (err) {
     parseError(err, res);
