@@ -89,6 +89,18 @@ router.put("/cart/:id", async (req, res) => {
   }
 });
 
+router.delete("/cart", async (req, res) => {
+  try {
+    const user = await getUser(req.user._id);
+    user.cart = [];
+    await user.save();
+
+    res.json(user);
+  } catch (err) {
+    parseError(err, res);
+  }
+});
+
 router.delete("/:id", isUser, async (req, res) => {
   try {
     res.status(200).json(await deleteOne(req.params.id));
